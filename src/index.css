@@ -1,0 +1,149 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* SPACE Brand Design System - LOCKED COLORS ONLY */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+@layer base {
+  :root {
+    /* SPACE Brand Colors - LOCKED */
+    --background: 0 0% 100%; /* White */
+    --foreground: 220 9% 25%; /* Dark Gray */
+    
+    --space-blue: 195 100% 50%; /* Bright Blue/Cyan */
+    --space-dark: 220 13% 18%; /* Dark Charcoal */
+    --space-off-white: 0 0% 98%; /* Off-white */
+    
+    --card: 0 0% 100%;
+    --card-foreground: 220 9% 25%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 9% 25%;
+    
+    --primary: 195 100% 50%; /* SPACE Blue */
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 0 0% 98%;
+    --secondary-foreground: 220 9% 25%;
+    
+    --muted: 0 0% 96%;
+    --muted-foreground: 220 9% 46%;
+    
+    --accent: 195 100% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 195 100% 50%;
+    
+    --radius: 0.25rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+}
+
+@layer components {
+  .space-container {
+    @apply max-w-7xl mx-auto px-6 lg:px-8;
+  }
+  
+  .space-section {
+    @apply py-16 lg:py-24;
+  }
+  
+  .space-heading {
+    @apply text-4xl lg:text-6xl font-bold uppercase tracking-tight text-foreground;
+  }
+  
+  .space-subheading {
+    @apply text-xl lg:text-2xl font-semibold uppercase tracking-wide text-foreground;
+  }
+  
+  .space-body {
+    @apply text-lg text-muted-foreground leading-relaxed;
+  }
+  
+  .space-blue-accent {
+    @apply h-1 w-16 bg-primary;
+  }
+  
+  .space-dark-section {
+    @apply bg-[hsl(var(--space-dark))] text-white;
+  }
+  
+  .space-diagonal {
+    clip-path: polygon(0 0, 100% 20%, 100% 100%, 0 80%);
+  }
+}
