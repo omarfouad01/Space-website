@@ -2,8 +2,33 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
+interface BrandData {
+  colors: {
+    primary: string;
+    background: string;
+    foreground: string;
+    accent: string;
+  };
+  logo: {
+    main: string;
+    white: string;
+  };
+}
+
 const Index = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [brandData, setBrandData] = useState<BrandData>({
+    colors: {
+      primary: '195 100% 50%',
+      background: '0 0% 100%',
+      foreground: '220 9% 25%',
+      accent: '195 100% 50%'
+    },
+    logo: {
+      main: './images/space_logo_20251229_183829.png',
+      white: './images/space_logo_white_20251229_183827.png'
+    }
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -11,6 +36,46 @@ const Index = () => {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+  
+  useEffect(() => {
+    // Load brand data from localStorage
+    const loadBrandData = () => {
+      const savedBrandData = localStorage.getItem('spaceBrandData');
+      if (savedBrandData) {
+        const parsedBrandData = JSON.parse(savedBrandData);
+        setBrandData(parsedBrandData);
+        
+        // Update CSS variables for colors
+        const root = document.documentElement;
+        root.style.setProperty('--primary', parsedBrandData.colors.primary);
+        root.style.setProperty('--background', parsedBrandData.colors.background);
+        root.style.setProperty('--foreground', parsedBrandData.colors.foreground);
+        root.style.setProperty('--accent', parsedBrandData.colors.accent);
+      }
+    };
+    
+    // Load initial data
+    loadBrandData();
+    
+    // Listen for brand updates from admin dashboard
+    const handleBrandUpdate = (event: CustomEvent) => {
+      const updatedBrandData = event.detail;
+      setBrandData(updatedBrandData);
+      
+      // Update CSS variables for colors
+      const root = document.documentElement;
+      root.style.setProperty('--primary', updatedBrandData.colors.primary);
+      root.style.setProperty('--background', updatedBrandData.colors.background);
+      root.style.setProperty('--foreground', updatedBrandData.colors.foreground);
+      root.style.setProperty('--accent', updatedBrandData.colors.accent);
+    };
+    
+    window.addEventListener('brandDataUpdated', handleBrandUpdate as EventListener);
+    
+    return () => {
+      window.removeEventListener('brandDataUpdated', handleBrandUpdate as EventListener);
+    };
   }, []);
 
   const scrollToSection = (id: string) => {
@@ -27,7 +92,7 @@ const Index = () => {
           <div className="flex items-center justify-between h-20">
             <div className="flex items-center">
               <img 
-                src="./images/space_logo_20251229_183829.png" 
+                src={brandData.logo.main} 
                 alt="SPACE" 
                 className="h-8 w-auto"
               />
@@ -295,7 +360,7 @@ const Index = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
             <div className="lg:col-span-2">
               <img 
-                src="./images/space_logo_white_20251229_183827.png" 
+                src={brandData.logo.white} 
                 alt="SPACE" 
                 className="h-8 w-auto mb-6"
               />

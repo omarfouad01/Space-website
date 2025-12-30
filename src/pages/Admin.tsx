@@ -312,13 +312,21 @@ const Admin = () => {
     
     // In a real app, this would upload to a server
     // For demo, we'll use the preview URL
-    setBrandData(prev => ({
-      ...prev,
+    const updatedBrandData = {
+      ...brandData,
       logo: {
-        ...prev.logo,
+        ...brandData.logo,
         [type]: upload.preview
       }
-    }));
+    };
+    
+    setBrandData(updatedBrandData);
+    
+    // Save to localStorage immediately
+    localStorage.setItem('spaceBrandData', JSON.stringify(updatedBrandData));
+    
+    // Trigger a custom event to notify other pages
+    window.dispatchEvent(new CustomEvent('brandDataUpdated', { detail: updatedBrandData }));
     
     // Clear the upload
     setLogoUploads(prev => ({
@@ -326,7 +334,7 @@ const Admin = () => {
       [type]: { file: null, preview: '', type }
     }));
     
-    alert(`${type === 'main' ? 'Main' : 'White'} logo updated successfully!`);
+    alert(`${type === 'main' ? 'Main' : 'White'} logo updated successfully! Changes will appear on the main website immediately.`);
   };
 
   const handleSaveContent = () => {
@@ -345,6 +353,9 @@ const Admin = () => {
     root.style.setProperty('--background', brandData.colors.background);
     root.style.setProperty('--foreground', brandData.colors.foreground);
     root.style.setProperty('--accent', brandData.colors.accent);
+    
+    // Trigger a custom event to notify other pages
+    window.dispatchEvent(new CustomEvent('brandDataUpdated', { detail: brandData }));
     
     alert('Brand settings saved successfully!');
   };
