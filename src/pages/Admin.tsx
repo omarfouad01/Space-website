@@ -472,7 +472,7 @@ const Admin = () => {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <img src={brandData.logo.main} alt="SPACE" className="h-8 w-auto" />
+              <img src={brandData.logo.main} alt="SPACE" className="h-16 w-auto" />
               <h1 className="text-2xl font-bold">Admin Dashboard</h1>
             </div>
             <div className="flex items-center space-x-4">
@@ -899,11 +899,11 @@ const Admin = () => {
                   <div className="grid grid-cols-2 gap-4 p-4 border rounded-lg">
                     <div>
                       <p className="text-sm text-muted-foreground mb-2">Current Main Logo:</p>
-                      <img src={brandData.logo.main} alt="Main Logo" className="h-12 w-auto border rounded" />
+                      <img src={brandData.logo.main} alt="Main Logo" className="h-16 w-auto border rounded" />
                     </div>
                     <div className="bg-gray-800 p-4 rounded">
                       <p className="text-sm text-white mb-2">Current White Logo:</p>
-                      <img src={brandData.logo.white} alt="White Logo" className="h-12 w-auto" />
+                      <img src={brandData.logo.white} alt="White Logo" className="h-16 w-auto" />
                     </div>
                   </div>
                 </CardContent>
