@@ -828,6 +828,13 @@ const Admin = () => {
                   </div>
                   {/* Logo Upload Section */}
                   <div className="space-y-4">
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                      <h4 className="font-semibold text-blue-800 mb-2">📝 Upload Your Own Logos</h4>
+                      <p className="text-sm text-blue-700">
+                        The website is currently using default logos. Upload your own logos below to replace them on the main website.
+                        Uploaded logos will be saved and used across the entire site.
+                      </p>
+                    </div>
                     <h4 className="font-semibold">Upload New Logos</h4>
                     
                     {/* Main Logo Upload */}
@@ -896,14 +903,46 @@ const Admin = () => {
                   </div>
                   
                   {/* Current Logos Preview */}
-                  <div className="grid grid-cols-2 gap-4 p-4 border rounded-lg">
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-2">Current Main Logo:</p>
-                      <img src={brandData.logo.main} alt="Main Logo" className="h-32 w-auto border rounded" />
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-semibold">Current Active Logos</h4>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => {
+                          const defaultLogos = {
+                            main: './images/space_logo_20251229_183829.png',
+                            white: './images/space_logo_white_20251229_183827.png'
+                          };
+                          const updatedBrandData = {
+                            ...brandData,
+                            logo: defaultLogos
+                          };
+                          setBrandData(updatedBrandData);
+                          localStorage.setItem('spaceBrandData', JSON.stringify(updatedBrandData));
+                          window.dispatchEvent(new CustomEvent('brandDataUpdated', { detail: updatedBrandData }));
+                          alert('Reset to default logos');
+                        }}
+                      >
+                        Reset to Default
+                      </Button>
                     </div>
-                    <div className="bg-gray-800 p-4 rounded">
-                      <p className="text-sm text-white mb-2">Current White Logo:</p>
-                      <img src={brandData.logo.white} alt="White Logo" className="h-32 w-auto" />
+                    
+                    <div className="grid grid-cols-2 gap-4 p-4 border rounded-lg">
+                      <div>
+                        <p className="text-sm text-muted-foreground mb-2">Current Main Logo:</p>
+                        <img src={brandData.logo.main} alt="Main Logo" className="h-32 w-auto border rounded" />
+                        <p className="text-xs text-muted-foreground mt-2">
+                          {brandData.logo.main.startsWith('data:') ? 'Uploaded Logo (Base64)' : 'Default Logo File'}
+                        </p>
+                      </div>
+                      <div className="bg-gray-800 p-4 rounded">
+                        <p className="text-sm text-white mb-2">Current White Logo:</p>
+                        <img src={brandData.logo.white} alt="White Logo" className="h-32 w-auto" />
+                        <p className="text-xs text-white/60 mt-2">
+                          {brandData.logo.white.startsWith('data:') ? 'Uploaded Logo (Base64)' : 'Default Logo File'}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
