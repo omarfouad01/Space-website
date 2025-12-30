@@ -172,35 +172,77 @@ const Admin = () => {
     }
   });
 
-  // Initialize default users
+  // Initialize and preserve users
   const initializeUsers = () => {
-    const defaultUsers: User[] = [
-      {
-        id: '1',
-        username: 'admin',
-        email: 'admin@space-exhibitions.com',
-        role: 'admin',
-        password: 'space2024admin',
-        createdAt: new Date().toISOString(),
-        isActive: true
-      },
-      {
-        id: '2',
-        username: 'editor',
-        email: 'editor@space-exhibitions.com',
-        role: 'editor',
-        password: 'editor2024',
-        createdAt: new Date().toISOString(),
-        isActive: true
-      }
-    ];
-    
     const savedUsers = localStorage.getItem('spaceUsers');
-    if (!savedUsers) {
+    
+    if (savedUsers) {
+      // Load existing users
+      const existingUsers = JSON.parse(savedUsers);
+      
+      // Ensure default admin and editor accounts exist
+      const hasAdmin = existingUsers.some((u: User) => u.username === 'admin');
+      const hasEditor = existingUsers.some((u: User) => u.username === 'editor');
+      
+      let updatedUsers = [...existingUsers];
+      
+      // Add default admin if missing
+      if (!hasAdmin) {
+        updatedUsers.push({
+          id: 'admin-default',
+          username: 'admin',
+          email: 'admin@space-exhibitions.com',
+          role: 'admin',
+          password: 'space2024admin',
+          createdAt: new Date().toISOString(),
+          isActive: true
+        });
+      }
+      
+      // Add default editor if missing
+      if (!hasEditor) {
+        updatedUsers.push({
+          id: 'editor-default',
+          username: 'editor',
+          email: 'editor@space-exhibitions.com',
+          role: 'editor',
+          password: 'editor2024',
+          createdAt: new Date().toISOString(),
+          isActive: true
+        });
+      }
+      
+      // Save updated users if we added defaults
+      if (!hasAdmin || !hasEditor) {
+        localStorage.setItem('spaceUsers', JSON.stringify(updatedUsers));
+      }
+      
+      setUsers(updatedUsers);
+    } else {
+      // No users exist, create defaults
+      const defaultUsers: User[] = [
+        {
+          id: 'admin-default',
+          username: 'admin',
+          email: 'admin@space-exhibitions.com',
+          role: 'admin',
+          password: 'space2024admin',
+          createdAt: new Date().toISOString(),
+          isActive: true
+        },
+        {
+          id: 'editor-default',
+          username: 'editor',
+          email: 'editor@space-exhibitions.com',
+          role: 'editor',
+          password: 'editor2024',
+          createdAt: new Date().toISOString(),
+          isActive: true
+        }
+      ];
+      
       localStorage.setItem('spaceUsers', JSON.stringify(defaultUsers));
       setUsers(defaultUsers);
-    } else {
-      setUsers(JSON.parse(savedUsers));
     }
   };
 
@@ -219,6 +261,31 @@ const Admin = () => {
       setUsers(updatedUsers);
     } else {
       alert('Invalid credentials or account is disabled');
+    }
+  };
+  
+  // Safe user data save function
+  const saveUserData = (userData: User[]) => {
+    try {
+      localStorage.setItem('spaceUsers', JSON.stringify(userData));
+      // Also save a timestamped backup
+      const backupKey = `spaceUsers_backup_${Date.now()}`;
+      localStorage.setItem(backupKey, JSON.stringify(userData));
+      
+      // Keep only the last 5 backups
+      const allKeys = Object.keys(localStorage);
+      const backupKeys = allKeys.filter(key => key.startsWith('spaceUsers_backup_')).sort();
+      if (backupKeys.length > 5) {
+        for (let i = 0; i < backupKeys.length - 5; i++) {
+          localStorage.removeItem(backupKeys[i]);
+        }
+      }
+      
+      return true;
+    } catch (error) {
+      console.error('Failed to save user data:', error);
+      alert('Failed to save user data. Your browser storage might be full.');
+      return false;
     }
   };
   
@@ -243,12 +310,13 @@ const Admin = () => {
     };
     
     const updatedUsers = [...users, user];
-    setUsers(updatedUsers);
-    localStorage.setItem('spaceUsers', JSON.stringify(updatedUsers));
     
-    setNewUser({ username: '', email: '', password: '', role: 'editor' });
-    setIsAddUserOpen(false);
-    alert('User added successfully!');
+    if (saveUserData(updatedUsers)) {
+      setUsers(updatedUsers);
+      setNewUser({ username: '', email: '', password: '', role: 'editor' });
+      setIsAddUserOpen(false);
+      alert('User added successfully!');
+    }
   };
   
   const handleEditUser = (user: User) => {
@@ -259,10 +327,12 @@ const Admin = () => {
     if (!editingUser) return;
     
     const updatedUsers = users.map(u => u.id === editingUser.id ? editingUser : u);
-    setUsers(updatedUsers);
-    localStorage.setItem('spaceUsers', JSON.stringify(updatedUsers));
-    setEditingUser(null);
-    alert('User updated successfully!');
+    
+    if (saveUserData(updatedUsers)) {
+      setUsers(updatedUsers);
+      setEditingUser(null);
+      alert('User updated successfully!');
+    }
   };
   
   const handleDeleteUser = (userId: string) => {
@@ -272,17 +342,21 @@ const Admin = () => {
     }
     
     const updatedUsers = users.filter(u => u.id !== userId);
-    setUsers(updatedUsers);
-    localStorage.setItem('spaceUsers', JSON.stringify(updatedUsers));
-    alert('User deleted successfully!');
+    
+    if (saveUserData(updatedUsers)) {
+      setUsers(updatedUsers);
+      alert('User deleted successfully!');
+    }
   };
   
   const toggleUserStatus = (userId: string) => {
     const updatedUsers = users.map(u => 
       u.id === userId ? { ...u, isActive: !u.isActive } : u
     );
-    setUsers(updatedUsers);
-    localStorage.setItem('spaceUsers', JSON.stringify(updatedUsers));
+    
+    if (saveUserData(updatedUsers)) {
+      setUsers(updatedUsers);
+    }
   };
   
   // Logo Upload Functions
@@ -975,6 +1049,64 @@ const Admin = () => {
           {/* User Management Tab - Admin Only */}
           {currentUser?.role === 'admin' && (
             <TabsContent value="users" className="space-y-6">
+              {/* Data Persistence Warning */}
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6">
+                <h4 className="font-semibold text-amber-800 mb-2">⚠️ Data Persistence Notice</h4>
+                <p className="text-sm text-amber-700 mb-3">
+                  User data is stored in your browser's local storage. It may be lost if you clear browser data or use a different browser.
+                  For production use, consider implementing a proper database backend.
+                </p>
+                <div className="flex gap-2">
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => {
+                      const userData = localStorage.getItem('spaceUsers');
+                      if (userData) {
+                        const blob = new Blob([userData], { type: 'application/json' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `space-users-backup-${new Date().toISOString().split('T')[0]}.json`;
+                        a.click();
+                        URL.revokeObjectURL(url);
+                      }
+                    }}
+                  >
+                    Download Backup
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => {
+                      const input = document.createElement('input');
+                      input.type = 'file';
+                      input.accept = '.json';
+                      input.onchange = (e) => {
+                        const file = (e.target as HTMLInputElement).files?.[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onload = (e) => {
+                            try {
+                              const userData = JSON.parse(e.target?.result as string);
+                              localStorage.setItem('spaceUsers', JSON.stringify(userData));
+                              setUsers(userData);
+                              alert('User data restored successfully!');
+                            } catch (error) {
+                              alert('Invalid backup file format');
+                            }
+                          };
+                          reader.readAsText(file);
+                        }
+                      };
+                      input.click();
+                    }}
+                  >
+                    Restore Backup
+                  </Button>
+                </div>
+              </div>
+              
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold">User Management</h2>
                 <Dialog open={isAddUserOpen} onOpenChange={setIsAddUserOpen}>
