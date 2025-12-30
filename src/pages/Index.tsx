@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { supabase } from '@/integrations/supabase/client';
 
 interface BrandData {
   colors: {
@@ -18,6 +19,17 @@ interface BrandData {
 
 const Index = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  
+  // Content state
+  const [heroContent, setHeroContent] = useState<any>(null);
+  const [aboutContent, setAboutContent] = useState<any>(null);
+  const [services, setServices] = useState<any[]>([]);
+  const [caseStudies, setCaseStudies] = useState<any[]>([]);
+  const [greenLifeContent, setGreenLifeContent] = useState<any>(null);
+  const [finalCtaContent, setFinalCtaContent] = useState<any>(null);
+  const [contactInfo, setContactInfo] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  
   const [brandData, setBrandData] = useState<BrandData>({
     colors: {
       primary: '195 100% 50%',
@@ -30,6 +42,60 @@ const Index = () => {
       white: './images/space_logo_white_20251229_183827.png'
     }
   });
+
+  // Fetch all content from Supabase
+  const fetchContent = async () => {
+    try {
+      setLoading(true);
+      
+      // Fetch all content in parallel
+      const [heroRes, aboutRes, servicesRes, caseStudiesRes, greenLifeRes, finalCtaRes, contactRes, brandRes] = await Promise.all([
+        supabase.from('hero_content_20251230').select('*').eq('is_active', true).single(),
+        supabase.from('about_content_20251230').select('*').eq('is_active', true).single(),
+        supabase.from('services_20251230').select('*').eq('is_active', true).order('display_order'),
+        supabase.from('case_studies_20251230').select('*').eq('is_active', true).order('display_order'),
+        supabase.from('green_life_content_20251230').select('*').eq('is_active', true).single(),
+        supabase.from('final_cta_20251230').select('*').eq('is_active', true).single(),
+        supabase.from('contact_info_20251230').select('*').eq('is_active', true).single(),
+        supabase.from('brand_settings_20251230').select('*').eq('is_active', true).single()
+      ]);
+      
+      // Set content state
+      if (heroRes.data) setHeroContent(heroRes.data);
+      if (aboutRes.data) setAboutContent(aboutRes.data);
+      if (servicesRes.data) setServices(servicesRes.data);
+      if (caseStudiesRes.data) setCaseStudies(caseStudiesRes.data);
+      if (greenLifeRes.data) setGreenLifeContent(greenLifeRes.data);
+      if (finalCtaRes.data) setFinalCtaContent(finalCtaRes.data);
+      if (contactRes.data) setContactInfo(contactRes.data);
+      
+      // Update brand data if available
+      if (brandRes.data) {
+        setBrandData(prev => ({
+          ...prev,
+          colors: {
+            primary: brandRes.data.primary_color || prev.colors.primary,
+            background: brandRes.data.background_color || prev.colors.background,
+            foreground: brandRes.data.foreground_color || prev.colors.foreground,
+            accent: brandRes.data.accent_color || prev.colors.accent
+          },
+          logo: {
+            main: brandRes.data.logo_main_url || prev.logo.main,
+            white: brandRes.data.logo_white_url || prev.logo.white
+          }
+        }));
+      }
+      
+    } catch (error) {
+      console.error('Error fetching content:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchContent();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -115,36 +181,42 @@ const Index = () => {
       <section id="home" className="space-section pt-40">
         <div className="space-container">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="mb-4">
-              <Badge variant="outline" className="text-primary border-primary/30 bg-primary/5 px-4 py-2 text-sm font-medium">
-                Trusted by 200+ Global Brands
-              </Badge>
-            </div>
-            <h1 className="space-heading mb-6">
-              Global Exhibition & Conference Organizers for Enterprise Leaders
-            </h1>
-            <div className="space-blue-accent mx-auto mb-8"></div>
-            <p className="text-xl lg:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-              From Fortune 500 product launches to international trade shows – we deliver events that drive business results.
-              <span className="block mt-4 text-lg font-medium text-foreground">500+ Successful Events | 2M+ Attendees | 50+ Countries</span>
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button 
-                size="lg" 
-                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg font-semibold"
-                onClick={() => scrollToSection('contact')}
-              >
-                Schedule Strategic Consultation
-              </Button>
-              <Button 
-                size="lg" 
-                variant="outline"
-                className="border-primary text-primary hover:bg-primary/5 px-8 py-6 text-lg font-semibold"
-                onClick={() => scrollToSection('work')}
-              >
-                View Success Stories
-              </Button>
-            </div>
+            {heroContent && (
+              <>
+                <div className="mb-4">
+                  <Badge variant="outline" className="text-primary border-primary/30 bg-primary/5 px-4 py-2 text-sm font-medium">
+                    {heroContent.trust_badge}
+                  </Badge>
+                </div>
+                <h1 className="space-heading mb-6">
+                  {heroContent.main_headline}
+                </h1>
+                <div className="space-blue-accent mx-auto mb-8"></div>
+                <p className="text-xl lg:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
+                  {heroContent.subheadline}
+                  <span className="block mt-4 text-lg font-medium text-foreground">{heroContent.metrics_text}</span>
+                </p>
+              </>
+            )}
+            {heroContent && (
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Button 
+                  size="lg" 
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg font-semibold"
+                  onClick={() => scrollToSection('contact')}
+                >
+                  {heroContent.primary_cta_text}
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  className="border-primary text-primary hover:bg-primary/5 px-8 py-6 text-lg font-semibold"
+                  onClick={() => scrollToSection('work')}
+                >
+                  {heroContent.secondary_cta_text}
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -180,53 +252,55 @@ const Index = () => {
       <section id="about" className="space-section bg-secondary/50">
         <div className="space-container">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="space-subheading mb-8">Strategic Exhibition Partners for Industry Leaders</h2>
-              <div className="space-blue-accent mx-auto mb-8"></div>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                For over 15 years, we've been the strategic partner of choice for Fortune 500 companies, 
-                government agencies, and industry associations planning mission-critical events.
-              </p>
-            </div>
+            {aboutContent && (
+              <>
+                <div className="text-center mb-16">
+                  <h2 className="space-subheading mb-8">{aboutContent.section_title}</h2>
+                  <div className="space-blue-accent mx-auto mb-8"></div>
+                  <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                    {aboutContent.intro_text}
+                  </p>
+                </div>
             
-            <div className="grid md:grid-cols-3 gap-8 mb-16">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl font-bold text-primary">15+</span>
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Years of Excellence</h3>
-                <p className="text-muted-foreground">Proven track record delivering world-class events for global enterprises</p>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl font-bold text-primary">500+</span>
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Successful Events</h3>
-                <p className="text-muted-foreground">From intimate C-suite gatherings to 50,000+ attendee exhibitions</p>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl font-bold text-primary">$2B+</span>
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Business Generated</h3>
-                <p className="text-muted-foreground">Measurable ROI and qualified leads generated for our clients</p>
-              </div>
-            </div>
-            
-            <div className="bg-white rounded-lg p-8 shadow-sm border">
-              <div className="max-w-3xl mx-auto text-center">
-                <blockquote className="text-xl italic text-muted-foreground mb-6">
-                  "SPACE delivered our most successful product launch in company history. Their strategic approach 
-                  and flawless execution generated $50M in qualified leads and established us as the industry leader."
-                </blockquote>
-                <div className="flex items-center justify-center">
-                  <div>
-                    <p className="font-semibold">Sarah Chen</p>
-                    <p className="text-sm text-muted-foreground">Chief Marketing Officer, Fortune 500 Tech Company</p>
+                <div className="grid md:grid-cols-3 gap-8 mb-16">
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <span className="text-2xl font-bold text-primary">{aboutContent.years_stat}</span>
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2">{aboutContent.years_description}</h3>
+                    <p className="text-muted-foreground">{aboutContent.years_detail}</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <span className="text-2xl font-bold text-primary">{aboutContent.events_stat}</span>
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2">{aboutContent.events_description}</h3>
+                    <p className="text-muted-foreground">{aboutContent.events_detail}</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <span className="text-2xl font-bold text-primary">{aboutContent.business_stat}</span>
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2">{aboutContent.business_description}</h3>
+                    <p className="text-muted-foreground">{aboutContent.business_detail}</p>
                   </div>
                 </div>
-              </div>
-            </div>
+                
+                <div className="bg-white rounded-lg p-8 shadow-sm border">
+                  <div className="max-w-3xl mx-auto text-center">
+                    <blockquote className="text-xl italic text-muted-foreground mb-6">
+                      "{aboutContent.testimonial_quote}"
+                    </blockquote>
+                    <div className="flex items-center justify-center">
+                      <div>
+                        <p className="font-semibold">{aboutContent.testimonial_author}</p>
+                        <p className="text-sm text-muted-foreground">{aboutContent.testimonial_title}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>
@@ -243,38 +317,7 @@ const Index = () => {
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                title: 'Global Exhibition Strategy',
-                description: 'Fortune 500-grade exhibition management delivering measurable ROI. From product launches to trade shows, we create experiences that generate qualified leads and drive business growth.',
-                metric: 'Avg. 300% ROI'
-              },
-              {
-                title: 'Executive Conference Design',
-                description: 'C-suite level conference orchestration for industry leaders. Strategic agenda development, VIP management, and outcome-focused programming that builds lasting business relationships.',
-                metric: '95% Executive Satisfaction'
-              },
-              {
-                title: 'Strategic Partnership Development',
-                description: 'Enterprise-level sponsorship and partnership strategies that create mutual value. We connect your brand with industry leaders and decision-makers who matter.',
-                metric: '$50M+ Partnerships Facilitated'
-              },
-              {
-                title: 'Experience Architecture',
-                description: 'Award-winning venue design and spatial strategy that maximizes engagement and brand impact. Every element designed to drive specific business outcomes.',
-                metric: '40% Higher Engagement'
-              },
-              {
-                title: 'Flawless Event Delivery',
-                description: 'Military-precision execution with dedicated project teams. Zero-failure tolerance for mission-critical corporate events and international exhibitions.',
-                metric: '99.8% Success Rate'
-              },
-              {
-                title: 'ROI-Focused Consulting',
-                description: 'Strategic advisory services for enterprise event portfolios. Data-driven insights, audience development, and performance optimization that delivers measurable business impact.',
-                metric: 'Avg. 250% Lead Increase'
-              }
-            ].map((service, index) => (
+            {services.map((service, index) => (
               <Card key={index} className="border-0 shadow-sm hover:shadow-lg transition-all duration-300 group">
                 <CardContent className="p-8">
                   <div className="flex items-center justify-between mb-4">
@@ -304,39 +347,11 @@ const Index = () => {
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                title: 'Fortune 500 Tech Product Launch',
-                category: 'Strategic Exhibition',
-                client: 'Global Technology Leader',
-                results: '$50M in qualified leads',
-                attendees: '15,000+ C-suite executives',
-                description: 'Mission-critical product launch for industry-defining AI technology. Generated record-breaking lead volume and established market leadership position.',
-                image: 'https://images.unsplash.com/photo-1687945727613-a4d06cc41024?w=600&auto=format&fit=crop&q=80'
-              },
-              {
-                title: 'International Healthcare Summit',
-                category: 'Government Partnership',
-                client: 'Ministry of Health + WHO',
-                results: '200+ policy agreements',
-                attendees: '5,000+ healthcare leaders',
-                description: 'Strategic healthcare policy summit resulting in international cooperation agreements and $2B in healthcare infrastructure commitments.',
-                image: 'https://images.unsplash.com/photo-1603430416744-a47cee46b0ae?w=600&auto=format&fit=crop&q=80'
-              },
-              {
-                title: 'Automotive Industry Transformation',
-                category: 'Trade Association Event',
-                client: 'Global Automotive Alliance',
-                results: '$500M in partnerships',
-                attendees: '25,000+ industry professionals',
-                description: 'Largest automotive exhibition in Asia-Pacific. Facilitated strategic partnerships and showcased next-generation mobility solutions.',
-                image: 'https://images.unsplash.com/photo-1594182878853-7cdb804bceaa?w=600&auto=format&fit=crop&q=80'
-              }
-            ].map((project, index) => (
+            {caseStudies.map((project, index) => (
               <Card key={index} className="border-0 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
                 <div className="aspect-video overflow-hidden">
                   <img 
-                    src={project.image} 
+                    src={project.image_url} 
                     alt={project.title}
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                   />
