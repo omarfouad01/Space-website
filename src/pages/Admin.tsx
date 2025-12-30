@@ -469,10 +469,10 @@ const Admin = () => {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b bg-white">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <img src={brandData.logo.main} alt="SPACE" className="h-16 w-auto" />
+              <img src={brandData.logo.main} alt="SPACE" className="h-24 w-auto" />
               <h1 className="text-2xl font-bold">Admin Dashboard</h1>
             </div>
             <div className="flex items-center space-x-4">
@@ -899,11 +899,11 @@ const Admin = () => {
                   <div className="grid grid-cols-2 gap-4 p-4 border rounded-lg">
                     <div>
                       <p className="text-sm text-muted-foreground mb-2">Current Main Logo:</p>
-                      <img src={brandData.logo.main} alt="Main Logo" className="h-16 w-auto border rounded" />
+                      <img src={brandData.logo.main} alt="Main Logo" className="h-32 w-auto border rounded" />
                     </div>
                     <div className="bg-gray-800 p-4 rounded">
                       <p className="text-sm text-white mb-2">Current White Logo:</p>
-                      <img src={brandData.logo.white} alt="White Logo" className="h-16 w-auto" />
+                      <img src={brandData.logo.white} alt="White Logo" className="h-32 w-auto" />
                     </div>
                   </div>
                 </CardContent>
@@ -1160,11 +1160,11 @@ const Admin = () => {
                   
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div className="border rounded-lg p-4 text-center">
-                      <img src={brandData.logo.main} alt="Main Logo" className="h-16 w-auto mx-auto mb-2" />
+                      <img src={brandData.logo.main} alt="Main Logo" className="h-32 w-auto mx-auto mb-2" />
                       <p className="text-sm font-medium">Main Logo</p>
                     </div>
                     <div className="border rounded-lg p-4 text-center bg-gray-800">
-                      <img src={brandData.logo.white} alt="White Logo" className="h-16 w-auto mx-auto mb-2" />
+                      <img src={brandData.logo.white} alt="White Logo" className="h-32 w-auto mx-auto mb-2" />
                       <p className="text-sm font-medium text-white">White Logo</p>
                     </div>
                   </div>

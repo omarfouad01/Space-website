@@ -89,12 +89,12 @@ const Index = () => {
         isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-sm' : 'bg-white'
       }`}>
         <div className="space-container">
-          <div className="flex items-center justify-between h-24">
+          <div className="flex items-center justify-between h-32">
             <div className="flex items-center">
               <img 
                 src={brandData.logo.main} 
                 alt="SPACE" 
-                className="h-16 w-auto"
+                className="h-32 w-auto"
               />
             </div>
             <nav className="hidden md:flex items-center space-x-8">
@@ -111,7 +111,7 @@ const Index = () => {
       </header>
 
       {/* Hero Section */}
-      <section id="home" className="space-section pt-32">
+      <section id="home" className="space-section pt-40">
         <div className="space-container">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="space-heading mb-8">
@@ -362,7 +362,7 @@ const Index = () => {
               <img 
                 src={brandData.logo.white} 
                 alt="SPACE" 
-                className="h-16 w-auto mb-6"
+                className="h-32 w-auto mb-6"
               />
               <p className="text-white/80 leading-relaxed max-w-md">
                 Creating exceptional exhibitions and conferences that drive meaningful connections 
