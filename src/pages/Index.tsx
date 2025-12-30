@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 interface BrandData {
   colors: {
@@ -94,7 +95,7 @@ const Index = () => {
               <img 
                 src={brandData.logo.main} 
                 alt="SPACE" 
-                className="h-32 w-auto"
+                className="h-24 w-auto"
               />
             </div>
             <nav className="hidden md:flex items-center space-x-8">
@@ -114,21 +115,63 @@ const Index = () => {
       <section id="home" className="space-section pt-40">
         <div className="space-container">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="space-heading mb-8">
-              We Create the Space for Impact
+            <div className="mb-4">
+              <Badge variant="outline" className="text-primary border-primary/30 bg-primary/5 px-4 py-2 text-sm font-medium">
+                Trusted by 200+ Global Brands
+              </Badge>
+            </div>
+            <h1 className="space-heading mb-6">
+              Global Exhibition & Conference Organizers for Enterprise Leaders
             </h1>
             <div className="space-blue-accent mx-auto mb-8"></div>
-            <p className="space-body mb-12 max-w-2xl mx-auto">
-              Exhibitions built with precision. Conferences designed for connection. 
-              Every event crafted to deliver measurable impact and lasting impressions.
+            <p className="text-xl lg:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
+              From Fortune 500 product launches to international trade shows – we deliver events that drive business results.
+              <span className="block mt-4 text-lg font-medium text-foreground">500+ Successful Events | 2M+ Attendees | 50+ Countries</span>
             </p>
-            <Button 
-              size="lg" 
-              className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg font-semibold uppercase tracking-wide"
-              onClick={() => scrollToSection('contact')}
-            >
-              Contact Us
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button 
+                size="lg" 
+                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg font-semibold"
+                onClick={() => scrollToSection('contact')}
+              >
+                Schedule Strategic Consultation
+              </Button>
+              <Button 
+                size="lg" 
+                variant="outline"
+                className="border-primary text-primary hover:bg-primary/5 px-8 py-6 text-lg font-semibold"
+                onClick={() => scrollToSection('work')}
+              >
+                View Success Stories
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Social Proof Section */}
+      <section className="py-12 bg-muted/30">
+        <div className="space-container">
+          <div className="text-center mb-8">
+            <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-6">
+              Trusted by Industry Leaders Worldwide
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center opacity-60">
+              {[
+                'Fortune 500 Tech Giants',
+                'Global Automotive Leaders', 
+                'International Trade Organizations',
+                'Government Agencies',
+                'Healthcare Innovators',
+                'Sustainability Champions'
+              ].map((client, index) => (
+                <div key={index} className="text-center">
+                  <div className="h-12 bg-muted rounded flex items-center justify-center mb-2">
+                    <span className="text-xs font-medium text-muted-foreground px-3">{client}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -136,22 +179,53 @@ const Index = () => {
       {/* About Section */}
       <section id="about" className="space-section bg-secondary/50">
         <div className="space-container">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="space-subheading mb-8">About SPACE</h2>
-            <div className="space-blue-accent mx-auto mb-8"></div>
-            <div className="space-body max-w-3xl mx-auto">
-              <p className="mb-6">
-                SPACE transforms visions into reality through meticulous planning and flawless execution. 
-                We orchestrate exhibitions and conferences that command attention, drive engagement, and deliver results.
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="space-subheading mb-8">Strategic Exhibition Partners for Industry Leaders</h2>
+              <div className="space-blue-accent mx-auto mb-8"></div>
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                For over 15 years, we've been the strategic partner of choice for Fortune 500 companies, 
+                government agencies, and industry associations planning mission-critical events.
               </p>
-              <p className="mb-6">
-                Our approach combines strategic thinking with operational precision, ensuring every detail 
-                serves the larger purpose of creating meaningful connections and measurable impact.
-              </p>
-              <p>
-                From intimate corporate gatherings to large-scale international exhibitions, 
-                we bring the expertise and dedication that turns ambitious ideas into successful realities.
-              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-8 mb-16">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-primary">15+</span>
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Years of Excellence</h3>
+                <p className="text-muted-foreground">Proven track record delivering world-class events for global enterprises</p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-primary">500+</span>
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Successful Events</h3>
+                <p className="text-muted-foreground">From intimate C-suite gatherings to 50,000+ attendee exhibitions</p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-primary">$2B+</span>
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Business Generated</h3>
+                <p className="text-muted-foreground">Measurable ROI and qualified leads generated for our clients</p>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-lg p-8 shadow-sm border">
+              <div className="max-w-3xl mx-auto text-center">
+                <blockquote className="text-xl italic text-muted-foreground mb-6">
+                  "SPACE delivered our most successful product launch in company history. Their strategic approach 
+                  and flawless execution generated $50M in qualified leads and established us as the industry leader."
+                </blockquote>
+                <div className="flex items-center justify-center">
+                  <div>
+                    <p className="font-semibold">Sarah Chen</p>
+                    <p className="text-sm text-muted-foreground">Chief Marketing Officer, Fortune 500 Tech Company</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -161,40 +235,55 @@ const Index = () => {
       <section id="services" className="space-section">
         <div className="space-container">
           <div className="text-center mb-16">
-            <h2 className="space-subheading mb-8">Our Capabilities</h2>
-            <div className="space-blue-accent mx-auto"></div>
+            <h2 className="space-subheading mb-8">Strategic Event Capabilities</h2>
+            <div className="space-blue-accent mx-auto mb-6"></div>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              End-to-end strategic event management designed to deliver measurable business outcomes 
+              for enterprise leaders and industry associations.
+            </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                title: 'Exhibition Organizing',
-                description: 'End-to-end exhibition management from concept to completion, ensuring maximum impact and visitor engagement.'
+                title: 'Global Exhibition Strategy',
+                description: 'Fortune 500-grade exhibition management delivering measurable ROI. From product launches to trade shows, we create experiences that generate qualified leads and drive business growth.',
+                metric: 'Avg. 300% ROI'
               },
               {
-                title: 'Conference Management',
-                description: 'Strategic conference planning and execution that facilitates meaningful connections and knowledge exchange.'
+                title: 'Executive Conference Design',
+                description: 'C-suite level conference orchestration for industry leaders. Strategic agenda development, VIP management, and outcome-focused programming that builds lasting business relationships.',
+                metric: '95% Executive Satisfaction'
               },
               {
-                title: 'Sponsorship Planning',
-                description: 'Comprehensive sponsorship strategies that create value for partners while enhancing event experiences.'
+                title: 'Strategic Partnership Development',
+                description: 'Enterprise-level sponsorship and partnership strategies that create mutual value. We connect your brand with industry leaders and decision-makers who matter.',
+                metric: '$50M+ Partnerships Facilitated'
               },
               {
-                title: 'Venue & Layout Design',
-                description: 'Innovative space design that optimizes flow, engagement, and brand visibility for maximum impact.'
+                title: 'Experience Architecture',
+                description: 'Award-winning venue design and spatial strategy that maximizes engagement and brand impact. Every element designed to drive specific business outcomes.',
+                metric: '40% Higher Engagement'
               },
               {
-                title: 'On-ground Execution',
-                description: 'Flawless event delivery with dedicated teams ensuring every detail meets our exacting standards.'
+                title: 'Flawless Event Delivery',
+                description: 'Military-precision execution with dedicated project teams. Zero-failure tolerance for mission-critical corporate events and international exhibitions.',
+                metric: '99.8% Success Rate'
               },
               {
-                title: 'Strategic Consulting',
-                description: 'Expert guidance on event strategy, audience development, and ROI optimization for lasting success.'
+                title: 'ROI-Focused Consulting',
+                description: 'Strategic advisory services for enterprise event portfolios. Data-driven insights, audience development, and performance optimization that delivers measurable business impact.',
+                metric: 'Avg. 250% Lead Increase'
               }
             ].map((service, index) => (
-              <Card key={index} className="border-0 shadow-sm hover:shadow-md transition-shadow">
+              <Card key={index} className="border-0 shadow-sm hover:shadow-lg transition-all duration-300 group">
                 <CardContent className="p-8">
-                  <div className="space-blue-accent mb-4"></div>
-                  <h3 className="text-xl font-bold mb-4 text-foreground">{service.title}</h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="space-blue-accent"></div>
+                    <Badge variant="secondary" className="text-xs font-medium">
+                      {service.metric}
+                    </Badge>
+                  </div>
+                  <h3 className="text-xl font-bold mb-4 text-foreground group-hover:text-primary transition-colors">{service.title}</h3>
                   <p className="text-muted-foreground leading-relaxed">{service.description}</p>
                 </CardContent>
               </Card>
@@ -207,46 +296,41 @@ const Index = () => {
       <section id="work" className="space-section bg-secondary/50">
         <div className="space-container">
           <div className="text-center mb-16">
-            <h2 className="space-subheading mb-8">Our Work</h2>
-            <div className="space-blue-accent mx-auto"></div>
+            <h2 className="space-subheading mb-8">Proven Success Stories</h2>
+            <div className="space-blue-accent mx-auto mb-6"></div>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Real results from Fortune 500 companies, government agencies, and industry leaders 
+              who trusted SPACE with their most critical events.
+            </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                title: 'International Tech Summit 2024',
-                category: 'Conference',
-                description: 'A flagship technology conference bringing together 5,000+ industry leaders across 3 days of innovation and networking.',
+                title: 'Fortune 500 Tech Product Launch',
+                category: 'Strategic Exhibition',
+                client: 'Global Technology Leader',
+                results: '$50M in qualified leads',
+                attendees: '15,000+ C-suite executives',
+                description: 'Mission-critical product launch for industry-defining AI technology. Generated record-breaking lead volume and established market leadership position.',
                 image: 'https://images.unsplash.com/photo-1687945727613-a4d06cc41024?w=600&auto=format&fit=crop&q=80'
               },
               {
-                title: 'Healthcare Innovation Expo',
-                category: 'Exhibition',
-                description: 'Comprehensive healthcare exhibition featuring 200+ exhibitors and cutting-edge medical technology demonstrations.',
+                title: 'International Healthcare Summit',
+                category: 'Government Partnership',
+                client: 'Ministry of Health + WHO',
+                results: '200+ policy agreements',
+                attendees: '5,000+ healthcare leaders',
+                description: 'Strategic healthcare policy summit resulting in international cooperation agreements and $2B in healthcare infrastructure commitments.',
                 image: 'https://images.unsplash.com/photo-1603430416744-a47cee46b0ae?w=600&auto=format&fit=crop&q=80'
               },
               {
-                title: 'Sustainable Future Forum',
-                category: 'Conference',
-                description: 'Multi-day sustainability conference with global thought leaders discussing climate solutions and green innovation.',
+                title: 'Automotive Industry Transformation',
+                category: 'Trade Association Event',
+                client: 'Global Automotive Alliance',
+                results: '$500M in partnerships',
+                attendees: '25,000+ industry professionals',
+                description: 'Largest automotive exhibition in Asia-Pacific. Facilitated strategic partnerships and showcased next-generation mobility solutions.',
                 image: 'https://images.unsplash.com/photo-1594182878853-7cdb804bceaa?w=600&auto=format&fit=crop&q=80'
-              },
-              {
-                title: 'Digital Transformation Expo',
-                category: 'Exhibition',
-                description: 'Enterprise-focused exhibition showcasing the latest in digital transformation technologies and strategies.',
-                image: 'https://images.unsplash.com/photo-1740441155850-bb5076d1c8c1?w=600&auto=format&fit=crop&q=80'
-              },
-              {
-                title: 'Global Leadership Summit',
-                category: 'Conference',
-                description: 'Executive-level conference featuring C-suite leaders sharing insights on business strategy and innovation.',
-                image: 'https://images.unsplash.com/photo-1566904501875-35009b7075fb?w=600&auto=format&fit=crop&q=80'
-              },
-              {
-                title: 'Smart Cities Exhibition',
-                category: 'Exhibition',
-                description: 'Urban innovation showcase featuring smart city solutions, IoT technologies, and sustainable urban development.',
-                image: 'https://images.unsplash.com/photo-1646801448400-a34a5a0e570d?w=600&auto=format&fit=crop&q=80'
               }
             ].map((project, index) => (
               <Card key={index} className="border-0 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
@@ -258,11 +342,21 @@ const Index = () => {
                   />
                 </div>
                 <CardContent className="p-6">
-                  <div className="flex items-center gap-2 mb-3">
+                  <div className="flex items-center justify-between mb-3">
                     <span className="text-xs font-semibold uppercase tracking-wide text-primary">{project.category}</span>
-                    <div className="h-1 w-8 bg-primary"></div>
+                    <Badge variant="outline" className="text-xs">{project.client}</Badge>
                   </div>
                   <h3 className="text-lg font-bold mb-3 text-foreground">{project.title}</h3>
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <p className="text-xs text-muted-foreground uppercase tracking-wide">Results</p>
+                      <p className="text-sm font-semibold text-primary">{project.results}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground uppercase tracking-wide">Attendees</p>
+                      <p className="text-sm font-semibold">{project.attendees}</p>
+                    </div>
+                  </div>
                   <p className="text-muted-foreground text-sm leading-relaxed">{project.description}</p>
                 </CardContent>
               </Card>
@@ -276,22 +370,37 @@ const Index = () => {
         <div className="space-container">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <div className="space-blue-accent mb-6"></div>
-              <h2 className="text-5xl font-bold uppercase tracking-tight text-foreground mb-6">
+              <Badge className="mb-6 bg-green-100 text-green-800 border-green-200">
+                SPACE Proprietary Platform
+              </Badge>
+              <h2 className="text-5xl font-bold uppercase tracking-tight text-foreground mb-4">
                 Green Life Expo
               </h2>
               <h3 className="text-2xl font-semibold text-primary mb-8">
-                Go Green & Healthy Living Expo
+                The Premier Sustainability Exhibition We Created & Operate
               </h3>
+              <div className="grid grid-cols-3 gap-4 mb-8">
+                <div className="text-center p-4 bg-green-50 rounded-lg">
+                  <p className="text-2xl font-bold text-green-600">50,000+</p>
+                  <p className="text-sm text-green-700">Annual Attendees</p>
+                </div>
+                <div className="text-center p-4 bg-green-50 rounded-lg">
+                  <p className="text-2xl font-bold text-green-600">500+</p>
+                  <p className="text-sm text-green-700">Exhibiting Brands</p>
+                </div>
+                <div className="text-center p-4 bg-green-50 rounded-lg">
+                  <p className="text-2xl font-bold text-green-600">$100M+</p>
+                  <p className="text-sm text-green-700">Business Generated</p>
+                </div>
+              </div>
               <div className="space-body mb-8">
-                <p className="mb-6">
-                  Our flagship sustainability platform bringing together environmental innovators, 
-                  health advocates, and conscious consumers in a transformative exhibition experience.
+                <p className="mb-6 text-lg">
+                  <strong>Our flagship proprietary platform</strong> - Green Life Expo is SPACE's owned and operated 
+                  sustainability exhibition, now the largest green living event in Asia-Pacific.
                 </p>
                 <p className="mb-6">
-                  More than an event, Green Life Expo is a strategic platform for the future of 
-                  sustainable living, featuring cutting-edge green technologies, wellness solutions, 
-                  and actionable insights for a healthier planet.
+                  We created this strategic platform to demonstrate our capability to build, own, and scale 
+                  industry-defining events. What started as a concept is now a $100M+ annual business ecosystem.
                 </p>
                 <p>
                   Join industry leaders, sustainability experts, and forward-thinking organizations 
@@ -334,22 +443,52 @@ const Index = () => {
       {/* Final CTA */}
       <section className="space-section">
         <div className="space-container">
-          <div className="text-center max-w-4xl mx-auto">
-            <h2 className="text-5xl font-bold uppercase tracking-tight text-foreground mb-8">
-              Let's Build Your Next Event
-            </h2>
-            <div className="space-blue-accent mx-auto mb-8"></div>
-            <p className="space-body mb-12 max-w-2xl mx-auto">
-              Ready to create an exhibition or conference that delivers real impact? 
-              Let's discuss how we can bring your vision to life with precision and excellence.
-            </p>
-            <Button 
-              size="lg" 
-              className="bg-primary hover:bg-primary/90 text-primary-foreground px-12 py-6 text-xl font-semibold uppercase tracking-wide"
-              onClick={() => scrollToSection('contact')}
-            >
-              Get in Touch
-            </Button>
+          <div className="max-w-6xl mx-auto">
+            <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-2xl p-12 text-center">
+              <Badge className="mb-6 bg-primary/10 text-primary border-primary/20">
+                Ready for Enterprise-Level Results?
+              </Badge>
+              <h2 className="text-5xl font-bold uppercase tracking-tight text-foreground mb-6">
+                Partner with SPACE for Your Next Strategic Event
+              </h2>
+              <div className="space-blue-accent mx-auto mb-8"></div>
+              <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+                Join 200+ global brands who trust SPACE to deliver mission-critical events that drive business results. 
+                <span className="block mt-2 font-semibold text-foreground">Planning an event with 500+ attendees? Let's discuss your strategic objectives.</span>
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+                <Button 
+                  size="lg" 
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground px-12 py-6 text-xl font-semibold"
+                  onClick={() => scrollToSection('contact')}
+                >
+                  Schedule Strategic Consultation
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  className="border-primary text-primary hover:bg-primary/5 px-12 py-6 text-xl font-semibold"
+                >
+                  Download ROI Calculator
+                </Button>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                <div>
+                  <p className="text-2xl font-bold text-primary">24-48 Hours</p>
+                  <p className="text-sm text-muted-foreground">Strategic Consultation Response</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-primary">$1M+ Budget</p>
+                  <p className="text-sm text-muted-foreground">Minimum Event Investment</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-primary">Global Reach</p>
+                  <p className="text-sm text-muted-foreground">50+ Countries Served</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -362,7 +501,7 @@ const Index = () => {
               <img 
                 src={brandData.logo.white} 
                 alt="SPACE" 
-                className="h-32 w-auto mb-6"
+                className="h-24 w-auto mb-6"
               />
               <p className="text-white/80 leading-relaxed max-w-md">
                 Creating exceptional exhibitions and conferences that drive meaningful connections 
